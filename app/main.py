@@ -3,22 +3,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes import users, vitals, alerts, monitoring
 from app.database import engine, Base
 
-# اتصال به دیتابیس
+# ساخت جداول دیتابیس
 Base.metadata.create_all(bind=engine)
 
-# فقط یک بار ایجاد FastAPI
+# ایجاد اپلیکیشن FastAPI
 app = FastAPI()
 
-# فعال‌سازی CORS
+# فعال‌سازی CORS برای ارتباط با کلاینت (مثل Flutter)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # برای تولید بهتر فقط دامین‌های مشخص را مجاز کنید
+    allow_origins=["*"],  # در محصول نهایی بهتر است فقط دامنه‌های مجاز تعریف شوند
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ثبت routeها
+# ثبت مسیرها (endpoints)
 app.include_router(users.router, prefix="/users", tags=["Users"])
 app.include_router(vitals.router, prefix="/vitals", tags=["Vitals"])
 app.include_router(alerts.router, prefix="/alerts", tags=["Alerts"])
