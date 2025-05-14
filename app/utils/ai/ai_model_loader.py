@@ -1,9 +1,16 @@
+
 import joblib
 import os
+import numpy as np
 
-model_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../ai/vital_model.pkl'))
-model = joblib.load(model_path)
+# مسیر به مدل ذخیره‌شده
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'vital_model.pkl')
+
+# بارگذاری مدل تنها یک بار هنگام ایمپورت
+model = joblib.load(MODEL_PATH)
 
 def predict_alert(heart_rate: float, blood_pressure: float, temperature: float) -> str:
-    prediction = model.predict([[heart_rate, blood_pressure, temperature]])[0]
-    return "danger" if prediction == 1 else "normal"
+    # تبدیل ورودی‌ها به آرایه NumPy
+    input_data = np.array([[heart_rate, blood_pressure, temperature]])
+    prediction = model.predict(input_data)
+    return "danger" if prediction[0] == 1 else "normal"
